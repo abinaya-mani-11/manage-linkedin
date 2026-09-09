@@ -1,26 +1,49 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+@theme {
+  --color-skeuo-base: #E0E5EC;
+  --color-skeuo-text: #1c1b1c;
+  --color-skeuo-accent: #595f65;
+  --color-skeuo-highlight: #ffffff;
+  
+  --shadow-skeuo-out: 6px 6px 14px rgba(163,177,198,0.6), -6px -6px 14px rgba(255,255,255,0.9);
+  --shadow-skeuo-in: inset 2px 2px 5px rgba(163,177,198,0.6), inset -2px -2px 5px rgba(255,255,255,0.8);
+  --shadow-skeuo-out-sm: 3px 3px 6px rgba(163,177,198,0.6), -3px -3px 6px rgba(255,255,255,0.9);
+  --shadow-skeuo-in-sm: inset 1px 1px 3px rgba(163,177,198,0.6), inset -1px -1px 3px rgba(255,255,255,0.8);
+  
+  --font-sans: "Inter", Arial, sans-serif;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-skeuo-base);
+  color: var(--color-skeuo-text);
+  font-family: var(--font-sans);
+}
+
+/* Utilities for Skeuomorphism */
+@utility skeuo-panel {
+  background-color: var(--color-skeuo-base);
+  box-shadow: var(--shadow-skeuo-out);
+  border-radius: 1rem;
+}
+
+@utility skeuo-inset {
+  background-color: var(--color-skeuo-base);
+  box-shadow: var(--shadow-skeuo-in);
+  border-radius: 0.5rem;
+}
+
+@utility skeuo-button {
+  background-color: var(--color-skeuo-base);
+  box-shadow: var(--shadow-skeuo-out-sm);
+  border-radius: 0.5rem;
+  transition: all 0.15s ease-in-out;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.skeuo-button:active {
+  box-shadow: var(--shadow-skeuo-in-sm);
 }
