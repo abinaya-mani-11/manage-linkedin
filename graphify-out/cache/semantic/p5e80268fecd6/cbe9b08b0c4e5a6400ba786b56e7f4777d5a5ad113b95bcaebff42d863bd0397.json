@@ -1,0 +1,1 @@
+{"nodes": [{"id": "claude_skills_graphify_skill", "label": "Graphify Skill Definition", "file_type": "document", "source_file": ".claude/skills/graphify/SKILL.md", "rationale": "Core logic and instructions for the graphify semantic extraction agent."}], "edges": [], "hyperedges": []}

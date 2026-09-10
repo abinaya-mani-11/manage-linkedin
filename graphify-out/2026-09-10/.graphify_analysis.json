@@ -1,0 +1,214 @@
+{
+  "communities": {
+    "0": [
+      "package",
+      "package_name",
+      "package_private",
+      "package_version",
+      "ref_eslint",
+      "ref_eslint_config_next",
+      "ref_lucide_react",
+      "ref_react",
+      "ref_react_dom",
+      "ref_tailwindcss",
+      "ref_tailwindcss_postcss",
+      "ref_types_node",
+      "ref_types_react",
+      "ref_types_react_dom",
+      "ref_typescript",
+      "src_app_page",
+      "src_app_page_home"
+    ],
+    "1": [
+      "tsconfig_compileroptions",
+      "tsconfig_compileroptions_allowjs",
+      "tsconfig_compileroptions_esmoduleinterop",
+      "tsconfig_compileroptions_incremental",
+      "tsconfig_compileroptions_isolatedmodules",
+      "tsconfig_compileroptions_jsx",
+      "tsconfig_compileroptions_lib",
+      "tsconfig_compileroptions_module",
+      "tsconfig_compileroptions_moduleresolution",
+      "tsconfig_compileroptions_noemit",
+      "tsconfig_compileroptions_paths",
+      "tsconfig_compileroptions_plugins",
+      "tsconfig_compileroptions_resolvejsonmodule",
+      "tsconfig_compileroptions_skiplibcheck",
+      "tsconfig_compileroptions_strict",
+      "tsconfig_compileroptions_target"
+    ],
+    "2": [
+      "package_devdependencies",
+      "package_devdependencies_eslint",
+      "package_devdependencies_eslint_config_next",
+      "package_devdependencies_tailwindcss",
+      "package_devdependencies_tailwindcss_postcss",
+      "package_devdependencies_types_node",
+      "package_devdependencies_types_react",
+      "package_devdependencies_types_react_dom",
+      "package_devdependencies_typescript"
+    ],
+    "3": [
+      "next_config",
+      "next_config_nextconfig",
+      "ref_next",
+      "src_app_layout",
+      "src_app_layout_geistmono",
+      "src_app_layout_geistsans",
+      "src_app_layout_metadata",
+      "src_app_layout_rootlayout"
+    ],
+    "4": [
+      "package_dependencies",
+      "package_dependencies_groq_sdk",
+      "package_dependencies_lucide_react",
+      "package_dependencies_next",
+      "package_dependencies_react",
+      "package_dependencies_react_dom"
+    ],
+    "5": [
+      "public_screenshot_demo",
+      "readme_backend",
+      "readme_frontend",
+      "readme_future_scope",
+      "readme_humanizer",
+      "readme_readme"
+    ],
+    "6": [
+      "package_scripts",
+      "package_scripts_build",
+      "package_scripts_dev",
+      "package_scripts_lint",
+      "package_scripts_start"
+    ],
+    "7": [
+      "ref_groq_sdk",
+      "src_app_api_groq_route",
+      "src_app_api_groq_route_groq",
+      "src_app_api_groq_route_post"
+    ],
+    "8": [
+      "agents_readme",
+      "claude_readme",
+      "claude_skills_graphify_skill"
+    ],
+    "9": [
+      "tsconfig",
+      "tsconfig_exclude",
+      "tsconfig_include"
+    ],
+    "10": [
+      "eslint_config",
+      "eslint_config_eslintconfig"
+    ],
+    "11": [
+      "postcss_config",
+      "postcss_config_config"
+    ]
+  },
+  "cohesion": {
+    "0": 0.125,
+    "1": 0.125,
+    "2": 0.2222222222222222,
+    "3": 0.25,
+    "4": 0.3333333333333333,
+    "5": 0.3333333333333333,
+    "6": 0.4,
+    "7": 0.5,
+    "8": 0.6666666666666666,
+    "9": 0.6666666666666666,
+    "10": 1.0,
+    "11": 1.0
+  },
+  "gods": [
+    {
+      "id": "tsconfig_compileroptions",
+      "label": "compilerOptions",
+      "degree": 16
+    },
+    {
+      "id": "package_scripts",
+      "label": "scripts",
+      "degree": 5
+    },
+    {
+      "id": "ref_next",
+      "label": "next",
+      "degree": 3
+    },
+    {
+      "id": "readme_readme",
+      "label": "Project Overview",
+      "degree": 3
+    },
+    {
+      "id": "ref_groq_sdk",
+      "label": "groq-sdk",
+      "degree": 2
+    },
+    {
+      "id": "ref_lucide_react",
+      "label": "lucide-react",
+      "degree": 2
+    },
+    {
+      "id": "ref_react",
+      "label": "react",
+      "degree": 2
+    },
+    {
+      "id": "claude_readme",
+      "label": "Claude Project Rules",
+      "degree": 2
+    },
+    {
+      "id": "readme_future_scope",
+      "label": "Future Roadmap",
+      "degree": 2
+    },
+    {
+      "id": "readme_humanizer",
+      "label": "Humanizer Logic",
+      "degree": 2
+    }
+  ],
+  "surprises": [
+    {
+      "source": "Post Creator UI Screenshot",
+      "target": "Humanizer Logic",
+      "source_files": [
+        "public/screenshot_demo.png",
+        "README.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "conceptually_related_to",
+      "why": "inferred connection - not explicitly stated in source; crosses file types (image \u2194 doc); connects across different repos/directories"
+    },
+    {
+      "source": "Claude Project Rules",
+      "target": "Graphify Skill Definition",
+      "source_files": [
+        "CLAUDE.md",
+        ".claude/skills/graphify/SKILL.md"
+      ],
+      "confidence": "INFERRED",
+      "relation": "references",
+      "why": "inferred connection - not explicitly stated in source; connects across different repos/directories"
+    },
+    {
+      "source": "Claude Project Rules",
+      "target": "Next.js Agent Rules",
+      "source_files": [
+        "CLAUDE.md",
+        "AGENTS.md"
+      ],
+      "confidence": "EXTRACTED",
+      "relation": "references",
+      "why": "connects across different repos/directories"
+    }
+  ],
+  "tokens": {
+    "input": 32091,
+    "output": 1368
+  }
+}

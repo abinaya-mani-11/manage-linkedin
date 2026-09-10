@@ -1,0 +1,1 @@
+{"nodes": [{"id": "agents_readme", "label": "Next.js Agent Rules", "file_type": "document", "source_file": "AGENTS.md", "rationale": "Contains breaking changes and conventions for this specific Next.js version."}], "edges": [], "hyperedges": []}
