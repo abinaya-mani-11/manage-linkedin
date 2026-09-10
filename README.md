@@ -1,36 +1,55 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+##  Getting Started
 
-## Getting Started
+This is a project, which is used to help in managing linkedin posts.
+Tell what is the post is about, then generate a draft in seconds, then directly post it to LinkedIn.
 
-First, run the development server:
+##  Tech stack
+**Frontend** (Current version)
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+- Next.js (App Router)
+- Tailwind CSS
+- TypeScript
+**Backend** (Current version)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+- Groq API
+- gpt-oss-20b (AI model via Groq)
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+And Next.js route.ts handles the backend for now
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+##  How to run
+1. Create a `.env` file. Inside it, put `GROQ_API_KEY=your_key`. (You can get a free API key from https://groq.com/)
 
-## Learn More
+2. Open the terminal. Navigate to the project directory.
 
-To learn more about Next.js, take a look at the following resources:
+3. Run the command: `npm run dev`
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+4. After running the command, the terminal points the URL, which is `http://localhost:3000`. `Ctrl+click` to access it on the browser.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+*Note: It will show two errors for now, as one of them is problem reading M_ID and other is a mismatch in client and html properties. Ignore them for now*
 
-## Deploy on Vercel
+![Screenshot](/public/screenshot_demo.png)
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+5. Then enter a post you want to post, then it will generate a draft.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## Future Scope
+
+1. To be able to log into your LinkedIn via linkedin OAuth.
+
+2. To be able to grab the posts from the LinkedIn url/id, like any other social media.
+
+3. To be able to Attach files to post in the linked in post. Like, video, images, etc.
+
+4. Create a Actual Humanizer logic for the posts to not get flagged as AI. *Note: Do not completely rely on Generated AI content, please double check while posting anything Generated Content*
+
+5. Add three different variants of the humanizer
+
+6. Directly post and tracking Analytics from the tool.
+
+7. Add schedule timer to post (Optional not confirmed)
+
+8. Create a rate limiting because the API key is on free tier or maybe paid tier, managing it with rate limiting as per the user's wish.
+
+9. Creating an actual release `exe` version of this application to natively run in the desktop instead of running the terminal commands for non tech people.
+
+
+
