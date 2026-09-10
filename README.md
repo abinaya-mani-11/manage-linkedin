@@ -9,6 +9,7 @@ Tell what is the post is about, then generate a draft in seconds, then directly 
 - Next.js (App Router)
 - Tailwind CSS
 - TypeScript
+
 **Backend** (Current version)
 
 - Groq API
