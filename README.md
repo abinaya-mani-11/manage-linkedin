@@ -32,6 +32,10 @@ And Next.js route.ts handles the backend for now
 
 5. Then enter a post you want to post, or paste any LinkedIn post URL / Activity ID to grab and remix an existing post, then it will generate a draft.
 
+6. Edit the draft if needed and select **Humanize & Re-Score**. The post is rewritten and checked against its source for factual consistency, completeness, repetition, and readability. Any remaining review concerns are shown with the editable final post. Review the result yourself before publishing.
+
+The humanizer aims to improve clarity and naturalness; it does not guarantee bypassing AI detectors or replace human review.
+
 ## Future Scope
 
 1. To be able to log into your LinkedIn via linkedin OAuth. - **COMPLETED ON SEPT 11, 2026**
@@ -40,9 +44,9 @@ And Next.js route.ts handles the backend for now
 
 3. To be able to Attach files to post in the linked in post. Like, video, images, etc. - **COMPLETED ON OCT 9, 2026**
 
-4. Create a Actual Humanizer logic for the posts to not get flagged as AI. *Note: Do not completely rely on Generated AI content, please double check while posting anything Generated Content*
+4. Add an authenticity-focused LinkedIn post humanizer with a quality review pass — **COMPLETED OCT 12, 2026**. It preserves source claims, checks for omissions and repetition, and asks the model to revise if the review identifies issues. Always review generated content before posting; detector evasion is not guaranteed.
 
-5. Add three different variants of the humanizer
+5. Add selectable Professional, Conversational, and Concise humanizer variants — **COMPLETED OCT 12, 2026**
 
 6. Directly post and tracking Analytics from the tool.
 

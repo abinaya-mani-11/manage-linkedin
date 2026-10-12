@@ -33,12 +33,54 @@ type SessionUser = {
   emailVerified?: boolean;
 };
 
+type GroqResponse = {
+  result: string;
+  validation?: unknown;
+};
+
+type HumanizerStyle = "professional" | "conversational" | "concise";
+
+const HUMANIZER_STYLE_OPTIONS: { value: HumanizerStyle; label: string; description: string }[] = [
+  { value: "professional", label: "Professional", description: "Polished and business-appropriate" },
+  { value: "conversational", label: "Conversational", description: "Friendly and natural" },
+  { value: "concise", label: "Concise", description: "Short and direct" },
+];
+
+async function readGroqResponse(response: Response): Promise<GroqResponse> {
+  let data: unknown;
+  try {
+    data = await response.json();
+  } catch {
+    throw new Error("Groq returned an invalid response. Please try again.");
+  }
+
+  const payload =
+    typeof data === "object" && data !== null
+      ? (data as { result?: unknown; error?: unknown; validation?: unknown })
+      : {};
+
+  if (!response.ok) {
+    throw new Error(
+      typeof payload.error === "string" ? payload.error : `Groq API returned ${response.status}`
+    );
+  }
+  if (typeof payload.result !== "string" || !payload.result.trim()) {
+    throw new Error("Groq returned an empty response. Please try again.");
+  }
+
+  return { result: payload.result.trim(), validation: payload.validation };
+}
+
 export default function Home() {
   const [idea, setIdea] = useState("");
   const [draft, setDraft] = useState("");
   const [finalPost, setFinalPost] = useState("");
+  const [humanizerStyle, setHumanizerStyle] = useState<HumanizerStyle>("conversational");
   const [loadingDraft, setLoadingDraft] = useState(false);
   const [loadingFinal, setLoadingFinal] = useState(false);
+  const [draftError, setDraftError] = useState<string | null>(null);
+  const [humanizeError, setHumanizeError] = useState<string | null>(null);
+  const [humanizeNotice, setHumanizeNotice] = useState<string | null>(null);
   const [copied, setCopied] = useState(false);
   const [attachments, setAttachments] = useState<File[]>([]);
   const [posting, setPosting] = useState(false);
@@ -55,27 +97,20 @@ export default function Home() {
   const [importedMessage, setImportedMessage] = useState<string | null>(null);
 
   const generateDraft = async () => {
-    if (!idea) return;
+    if (!idea.trim()) return;
     setLoadingDraft(true);
+    setDraftError(null);
     try {
       const response = await fetch("/api/groq", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ action: "draft", text: idea }),
       });
-      if (!response.ok) {
-        const errText = await response.text();
-        throw new Error(errText || `Groq API returned ${response.status}`);
-      }
-      let data;
-      try {
-        data = await response.json();
-      } catch {
-        throw new Error("Failed to parse JSON response from Groq API");
-      }
+      const data = await readGroqResponse(response);
       setDraft(data.result);
     } catch (error) {
       console.error("generateDraft error:", error);
+      setDraftError(error instanceof Error ? error.message : "Unable to generate a draft.");
     } finally {
       setLoadingDraft(false);
     }
@@ -83,27 +118,39 @@ export default function Home() {
 
 
   const humanizeDraft = async () => {
-    if (!draft) return;
+    if (!draft.trim()) return;
     setLoadingFinal(true);
+    setHumanizeError(null);
+    setHumanizeNotice(null);
     try {
       const response = await fetch("/api/groq", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ action: "humanize", text: draft }),
+        body: JSON.stringify({ action: "humanize", text: draft, style: humanizerStyle }),
       });
-      if (!response.ok) {
-        const errText = await response.text();
-        throw new Error(errText || `Groq API returned ${response.status}`);
-      }
-      let data;
-      try {
-        data = await response.json();
-      } catch {
-        throw new Error("Failed to parse JSON response from Groq API");
+      const data = await readGroqResponse(response);
+      if (
+        typeof data.validation !== "object" ||
+        data.validation === null ||
+        !("passed" in data.validation) ||
+        typeof data.validation.passed !== "boolean" ||
+        !("issues" in data.validation) ||
+        !Array.isArray(data.validation.issues) ||
+        !data.validation.issues.every((issue) => typeof issue === "string")
+      ) {
+        throw new Error("The humanization quality check could not be verified. Please try again.");
       }
       setFinalPost(data.result);
+      setHumanizeNotice(
+        data.validation.passed
+          ? "Quality checks passed. Review and edit the post before publishing."
+          : `The post was revised, but still needs your review: ${
+              data.validation.issues.join("; ") || "one or more quality checks were inconclusive"
+            }.`
+      );
     } catch (error) {
       console.error("humanizeDraft error:", error);
+      setHumanizeError(error instanceof Error ? error.message : "Unable to humanize the post.");
     } finally {
       setLoadingFinal(false);
     }
@@ -516,12 +563,18 @@ export default function Home() {
               />
               <button
                 onClick={generateDraft}
-                disabled={loadingDraft || !idea}
+                disabled={loadingDraft || !idea.trim()}
                 className="skeuo-button w-full py-3 font-bold text-gray-700 gap-2 disabled:opacity-50"
               >
                 <Sparkles size={18} className="text-blue-500" />
                 {loadingDraft ? "Generating..." : "Generate AI Draft"}
               </button>
+              {draftError && (
+                <p role="alert" className="flex items-center gap-2 text-sm text-red-600">
+                  <AlertCircle size={16} className="shrink-0" />
+                  {draftError}
+                </p>
+              )}
             </section>
 
             {/* Stage 2: Draft */}
@@ -552,14 +605,44 @@ export default function Home() {
                   Contrarian Hook
                 </button>
               </div>
+              <fieldset className="flex flex-col gap-2">
+                <legend className="text-xs font-semibold text-gray-600">Humanizer style</legend>
+                <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                  {HUMANIZER_STYLE_OPTIONS.map((option) => {
+                    const selected = humanizerStyle === option.value;
+                    return (
+                      <button
+                        key={option.value}
+                        type="button"
+                        aria-pressed={selected}
+                        onClick={() => setHumanizerStyle(option.value)}
+                        className={`flex flex-col items-start rounded px-3 py-2 text-left transition-colors ${
+                          selected
+                            ? "skeuo-inset text-blue-700 ring-1 ring-blue-300"
+                            : "skeuo-button text-gray-600 hover:text-blue-600"
+                        }`}
+                      >
+                        <span className="text-xs font-bold">{option.label}</span>
+                        <span className="text-[10px] opacity-80">{option.description}</span>
+                      </button>
+                    );
+                  })}
+                </div>
+              </fieldset>
               <button
                 onClick={humanizeDraft}
-                disabled={loadingFinal || !draft}
+                disabled={loadingFinal || !draft.trim()}
                 className="skeuo-button w-full py-3 font-bold text-gray-700 gap-2 disabled:opacity-50"
               >
                 <Wand2 size={18} className="text-purple-500" />
-                {loadingFinal ? "Humanizing..." : "Humanize & Re-Score"}
+                {loadingFinal ? "Humanizing and checking..." : "Humanize & Re-Score"}
               </button>
+              {humanizeError && (
+                <p role="alert" className="flex items-center gap-2 text-sm text-red-600">
+                  <AlertCircle size={16} className="shrink-0" />
+                  {humanizeError}
+                </p>
+              )}
             </section>
           </div>
 
@@ -597,6 +680,18 @@ export default function Home() {
                     </p>
                   </div>
                 </div>
+                {humanizeNotice && (
+                  <p
+                    role="status"
+                    className={`text-xs ${
+                      humanizeNotice.startsWith("Quality checks passed")
+                        ? "text-green-700"
+                        : "text-amber-700"
+                    }`}
+                  >
+                    {humanizeNotice}
+                  </p>
+                )}
                 <textarea
                   value={finalPost}
                   onChange={(e) => setFinalPost(e.target.value)}
